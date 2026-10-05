@@ -1,9 +1,9 @@
 cask "agent-beta" do
   arch arm: "arm64", intel: "amd64"
 
-  version "4.6.0-rc.1"
-  sha256 arm:   "55838489e5881866ba1d1ab9a6c6af4acc047a1fb0152d98048b682ec05f0014",
-         intel: "f56fddd0d323f879f7f3bf7a151efef4f1fed3f2cf836e920277ab2ffa4ab361"
+  version "4.6.0-rc.2"
+  sha256 arm:   "8b3ba4d03065946771d6679df7ceac89a3b9c1f654df7f15d32967fb12ac9827",
+         intel: "771fe17c4421d2da3aeafde96eb1709faea6990e0a6628080181bb099887f726"
 
   url "https://pub-repo.sematext.com/macos/sematext-agent/#{version}/st-agent_#{version}_darwin_#{arch}.tar.gz"
   name "Sematext Agent (beta)"
@@ -18,14 +18,14 @@ cask "agent-beta" do
 
   binary "st-agent"
 
-  postflight do
-    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/st-agent"]
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{staged_path}}/st-agent"]
     # An existing config means this is an upgrade: reinstall the daemon from
     # the new binary. The file is root-only, so only its presence is checked.
-    if File.exist?("/opt/spm/properties/infra.properties")
-      # sudo -E would carry a developer's SPM_ROOT; the check above is for /opt/spm.
-      system_command "#{staged_path}/st-agent", args: ["macos-service", "install"], sudo: true,
-                     env: { "SPM_ROOT" => "/opt/spm" }
+    if_path_exists "/opt/spm/properties/infra.properties" do
+      # Homebrew runs sudo -E, so pin SPM_ROOT: the check above is for /opt/spm.
+      run "{{staged_path}}/st-agent", args: ["macos-service", "install"], sudo: true,
+                                      env: { "SPM_ROOT" => "/opt/spm" }
     end
   end
 
