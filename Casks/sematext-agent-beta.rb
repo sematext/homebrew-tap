@@ -1,9 +1,9 @@
 cask "sematext-agent-beta" do
   arch arm: "arm64", intel: "amd64"
 
-  version "4.6.1"
-  sha256 arm:   "f9cca20211a2345c2fbcc901b5d283eb2dbbb144816d713a128fa3955c66b6fb",
-         intel: "ae113f32ed52dd4d8e9d1a1948c7b3566bdde8bad65dd982040101c8f1344417"
+  version "4.7.0-rc.1"
+  sha256 arm:   "0ec2c5f34c5072c335d0196cfb9489f79320a81e18bb4b046f4d2f2605846b59",
+         intel: "917035cd1074f3e9be1ec30e186eb80a90679d984d92f09ec4541e3a13fbea0d"
 
   url "https://pub-repo.sematext.com/macos/sematext-agent/#{version}/st-agent_#{version}_darwin_#{arch}.tar.gz"
   name "Sematext Agent (beta)"
